@@ -1,3 +1,7 @@
+
+
+# firt step
+#thfghmfjmbmbnk,nn.
 import sys
 import scipy as sp
 import numpy as np
