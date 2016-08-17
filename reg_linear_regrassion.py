@@ -22,5 +22,36 @@ def plotData(data):
 def segmoid (z):
     return scipy.special.expit(z)
     
+    
+def mapFeature(x1,x2):
+    degree=6
+    out=np.ones( (np.shape(x1)[0],1) )
+    c=0   
+    for i in range(1,degree+1):
+        for j in range(0,i+1):
+            c=c+1
+            val1=x1**(i-j)
+            val2=x2**(j)
+            #val0=(val1*val2)
+            val=(val1*val2).reshape(np.shape(val1)[0],1)
+            out   = np.hstack(( out, val ))
+    return out
+def computeCost(x,y,theta,lamda):
+    m=np.shape(x)[0]
+    h=segmoid(x.dot(theta))
+    val1=-np.log(h).dot(y)
+    val2=
+    
+    
+    
+    
+    
+    
+    
+    
+print mapFeature(np.array([2,3]),np.array([3,4]))
+                     
+    
+    
           
 print    plotData(data) 
