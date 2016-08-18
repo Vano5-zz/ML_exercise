@@ -40,18 +40,36 @@ def computeCost(x,y,theta,lamda):
     m=np.shape(x)[0]
     h=segmoid(x.dot(theta))
     val1=-np.log(h).dot(y)
-    val2=
+    val2=np.log(1-h).dot(1-y)
+    left_sum=(val1-val2)/m
+    right_sum=theta.T.dot(theta)*lamda/(2*m)
+    J=left_sum+right_sum
+    return J
+def GradientDescent(x,y,lamda,theta):
+    m=np.shape(x)[0]
+    h=segmoid(theta.dot(x))
+    grad=x.T.dot((h-y))/m
+    grad[1:]=grad[1:]+((theta[1:]*lamda)/m)
+    return grad
+def costFunction(theta,x,y,lamda):
+    cost=computeCost(x,y,theta,lamda)
+    gradient=GradientDescent(x,y,lamda,theta)
+    return cost
+def FindMinTheta(theta,x,y,lamda):
+    result=scipy.optimize.minimaze(costFunction,x0=theta,args=(x,y,lamda),method='BFGS', options={"maxiter":500, "disp":True} )
+    return result
+
+def plot1():
+    data=np.genfromtxt('F:\EPAM\coursera\ML_COURSERA_GARVARD\machine-learning-ex2\ex2\ex2data2.txt',delimiter=',')
+      
+    x1=data[:,0]
+    x2=data[:,1]
+    x=mapFeature(x1,x2)
+    y=data[:,2]
     
+    theta =np.zeros(np.shape(x)[1])
+    lamda=1.0
+    cost=computeCost(x,y,theta,lamda)
+
+  
     
-    
-    
-    
-    
-    
-    
-print mapFeature(np.array([2,3]),np.array([3,4]))
-                     
-    
-    
-          
-print    plotData(data) 
