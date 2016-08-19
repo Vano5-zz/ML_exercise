@@ -17,7 +17,7 @@ def plotData(data):
     plt.scatter( negative[:, 0], negative[:, 1], c='y', marker='o', s=40, linewidths=1, label="Not admitted" ) 
     plt.scatter( pozitive[:, 0], pozitive[:, 1], c='b', marker='+', s=40, linewidths=2, label="Admitted" ) 
     plt.legend() 
-    
+    #plt.show()
 
 def segmoid (z):
     return scipy.special.expit(z)
@@ -47,7 +47,7 @@ def computeCost(x,y,theta,lamda):
     return J
 def GradientDescent(x,y,lamda,theta):
     m=np.shape(x)[0]
-    h=segmoid(theta.dot(x))
+    h=segmoid(x.dot(theta))
     grad=x.T.dot((h-y))/m
     grad[1:]=grad[1:]+((theta[1:]*lamda)/m)
     return grad
@@ -56,8 +56,8 @@ def costFunction(theta,x,y,lamda):
     gradient=GradientDescent(x,y,lamda,theta)
     return cost
 def FindMinTheta(theta,x,y,lamda):
-    result=scipy.optimize.minimaze(costFunction,x0=theta,args=(x,y,lamda),method='BFGS', options={"maxiter":500, "disp":True} )
-    return result
+    result=scipy.optimize.minimize(costFunction,x0=theta,args=(x,y,lamda),method='BFGS', options={"maxiter":500, "disp":True} )
+    return result.x,result.fun
 
 def plot1():
     data=np.genfromtxt('F:\EPAM\coursera\ML_COURSERA_GARVARD\machine-learning-ex2\ex2\ex2data2.txt',delimiter=',')
@@ -68,8 +68,36 @@ def plot1():
     y=data[:,2]
     
     theta =np.zeros(np.shape(x)[1])
-    lamda=1.0
-    cost=computeCost(x,y,theta,lamda)
+    lamdas=[0.0,1.0,100.]
+    for lamda in lamdas:
+        theta,cost=FindMinTheta(theta,x,y,lamda)
+        
+        plt.text( 0.15, 1.4, 'Lamda %.1f' % lamda ) 
+ 	#plt.plot( data ) 
+ 	
+ 	u = np.linspace( -1, 1.5,2 ) 
+	v = np.linspace( -1, 1.5, 2 ) 
+	z = np.zeros( (len(u), len(v)) ) 
+	
+	for i in range(0, len(u)): 
+	  
+           for j in range(0, len(v)): 
+                
+ 	        mapped = mapFeature( np.array([u[i]]), np.array([v[j]]) )
+ 	        #print np.array([u[i]]) 
+ 	        #print mapped
+		z[i,j] = mapped.dot( theta ) 
+		#print z
+        z = z.transpose() 
+        u, v = np.meshgrid( u, v )
+    plt.figure()
+    cs= plt.contour( u, v, z,1000 ) 
+    plt.clabel(cs,inline=1000,frontsize=0.0000000000001)
+    plt.show()
+        
+print plot1()
+        
+       
 
   
     
